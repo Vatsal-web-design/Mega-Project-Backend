@@ -112,8 +112,9 @@ const loginUser = asynchandler(async (req, res) => {
     // send cookie
 
     const { email, username, password } = req.body
+    console.log(email)
 
-    if (!username || !email) {
+    if (!username && !email) {
         throw new ApiError(400, "username or email is required")
     }
 
@@ -128,23 +129,23 @@ const loginUser = asynchandler(async (req, res) => {
     const ispasswordValid = await user.isPasswordCorrect(password)
 
     if (!ispasswordValid) {
-        throw new ApiError(401, "Tnvelid user Credentials")
+        throw new ApiError(401, "Invelid user Credentials")
     }
 
     const { accessToken, refreshToken } = await generateAccessAndRefereshToken(user._id)
 
     const loggedInUser = await User.findById(user._id)
-    select("-paswword -refreshToken")
+        .select("-paswword -refreshToken")
 
     const options = {
         httpOnly: true,
         secure: true
     }
 
-    return res.
-        status(200)
+    return res
+        .status(200)
         .cookie("accessToken", accessToken, options)
-        .cookise("refreshToken", refreshToken, options)
+        .cookie("refreshToken", refreshToken, options)
         .json(
             new Apiresponse(
                 200,
