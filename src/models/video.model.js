@@ -16,7 +16,7 @@ const videoSchema = new Schema(
             required: true
         },
         discription: {
-            type: Number,
+            type: Number,  //cloudinary url
             required: true
         },
         viwes: {
